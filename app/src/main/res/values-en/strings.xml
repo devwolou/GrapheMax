@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GrapheCW</string>
+    <string name="mnuAddArc">Mode adding nodes</string>
+    <string name="mnuResetGraph">Reset the graph</string>
+    <string name="mnuMoovGraph">Node Move Mode</string>
+    <string name="actionDeleteNode">Remove node</string>
+    <string name="actionModifNodeEtiq">Edit the node label</string>
+    <string name="actionResizeNode">Change the size of the node</string>
+    <string name="actionModifNodeColor">Change the color of the node</string>
+    <string name="actionAddNode">Add a node here</string>
+    <string name="actionModifEtqArc">Change the bow label</string>
+    <string name="AjoutArc">Bow label</string>
+    <string name="etiquettenoeud">Node label</string>
+    <string name="annuler">Cancel</string>
+    <string name="changerCouleur">Change node color</string>
+    <string name="ok">Ok</string>
+    <string name="creerNoeud">Creating new node</string>
+    <string name="ajouter">Add</string>
+    <string name="mnuUpdateNodeArc">Mode update Node/Bow</string>
+    <string name="tailleNode">Size of node</string>
+</resources>

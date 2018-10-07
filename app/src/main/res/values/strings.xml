@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">GrapheCW</string>
+    <string name="mnuAddArc">Mode ajout Arc/Boucles</string>
+    <string name="mnuResetGraph">Réinitialiser le graphe</string>
+    <string name="mnuMoovGraph">Mode Déplacement de noeud</string>
+    <string name="actionDeleteNode">Supprimer le noeud</string>
+    <string name="actionModifNodeEtiq">Modifier l\'étiquette du noeud</string>
+    <string name="actionResizeNode">Modifier la taille du noeud</string>
+    <string name="actionModifNodeColor">Modifier la couleur du noeud</string>
+    <string name="actionAddNode">Ajouter un noeud ici</string>
+    <string name="actionModifEtqArc">Modifier l\'étiquette de l\'arc</string>
+    <string name="color_prompt">color_prompt</string>
+    <string name="AjoutArc">Etiquette de l\'arc</string>
+    <string name="ajouter">Ajouter</string>
+    <string name="etiquettenoeud">Etiquette du noeud</string>
+    <string name="annuler">Annuler</string>
+    <string name="changerCouleur">Changer la couleur</string>
+    <string name="ok">Ok</string>
+    <string name="creerNoeud">Création nouveau noeud</string>
+    <string name="mnuUpdateNodeArc">Menu modif noeud/Arc</string>
+    <string name="tailleNode">La taille du noeud</string>
+
+    <string-array name="color_arrays">
+        <item>Rouge</item>
+        <item>Vert</item>
+        <item>Bleu</item>
+        <item>Orange</item>
+        <item>Cyan</item>
+        <item>Magenta</item>
+        <item>Noir</item>
+    </string-array>
+
+</resources>

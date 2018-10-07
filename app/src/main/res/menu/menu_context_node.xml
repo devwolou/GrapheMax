@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/actionDeleteNode"
+        android:title="@string/actionDeleteNode" />
+    <item
+        android:id="@+id/actionModifNodeEtiq"
+        android:title="@string/actionModifNodeEtiq" />
+    <item
+        android:id="@+id/actionResizeNode"
+        android:title="@string/actionResizeNode" />
+    <item
+        android:id="@+id/actionModifNodeColor"
+        android:title="@string/actionModifNodeColor" />
+</menu>
