@@ -21,6 +21,59 @@ public class DrawableGraph extends Drawable {
         graph = g;
     }
 
+    /**
+     * Méthode par dichotomie pour trouver un point d'intersection entre l'arc et le bord d'un noeud
+     * @param edgePath
+     * @param a
+     * @return
+     */
+    public Path findPoint(Path edgePath, ArcFinal a)
+    {
+        //creation des variables notamment les bornes supérieur et inférieure du path et la varible point contenant les coordonnee du point
+        double ecart = 1e-5;
+        float[] point = {0f, 0f};
+        float borneInf =0, borneSup = 1 ,mid ;
+        Region region;
+        PathMeasure pm = new PathMeasure(edgePath,false);
+        //Tant que la borne superieure reste superieure a la borne inferieure, on continue la dichotomie
+        while(borneInf < borneSup - ecart) {
+            Path path = new Path();
+            RectF rectF = new RectF(a.getNodeTo());
+            path.addRoundRect(rectF, 40, 40, Path.Direction.CW);
+            path.computeBounds(rectF, true);
+            region = new Region();
+            region.setPath(path, new Region((int)rectF.left, (int) rectF.top, (int)rectF.right, (int) rectF.bottom));
+            mid = (borneInf + borneSup) / 2;
+            pm.getPosTan(pm.getLength() * mid, point, null);
+            //Si le point est contenu dans la region, alors la borne supérieure devient le milieu, sinon c'est la borne inferieure qui devient le milieu
+            if(!region.contains((int)point[0], (int)point[1])) {
+                borneInf = mid;
+            }
+            else {
+                borneSup = mid;
+            }
+        }
+        //point temporarire afin de calculer deux autres points
+        float[] pointTemp = {0f, 0f};
+        int widthFleche = a.getWidth() * 3;
+
+        pm.getPosTan(pm.getLength() * (borneSup - (widthFleche/pm.getLength())), pointTemp, null);
+
+        //On calcule deux points afin de dessiner la fleche
+        float[] pointA = {pointTemp[0] + point[1] - pointTemp[1], pointTemp[1] + pointTemp[0] - point[0]};
+        float[] pointB = {pointTemp[0] + pointTemp[1] - point[1], pointTemp[1] + point[0] - pointTemp[0]};
+        //Cree un path créant la fleche a partir des points
+
+        Path pfleche = new Path();
+        pfleche.moveTo(point[0], point[1]);
+        pfleche.lineTo(pointA[0], pointA[1]);
+        pfleche.moveTo(point[0], point[1]);
+        pfleche.lineTo(pointB[0], pointB[1]);
+
+        return pfleche;
+    }
+
+
     public void draw(Canvas canvas) {
 
         Paint pArcTemp = new Paint();
@@ -72,7 +125,17 @@ public class DrawableGraph extends Drawable {
             }
 
 
+            //On cree un paint pour la fleche avec certains attributs égaux à ceux de l'arc
+            Path pathFleche = findPoint(path,a);
+            Paint paintFleche = new Paint();
+            paintFleche.setColor(a.getColor());
+            paintFleche.setStrokeWidth(a.getWidth());
+            paintFleche.setStyle(Paint.Style.STROKE);
+
+            canvas.drawPath(pathFleche,paintFleche);
             canvas.drawPath(path, pArc);
+
+
             //Création de l'étiquette
             Paint pTexte = new Paint();
             pTexte.setColor(Color.BLACK);

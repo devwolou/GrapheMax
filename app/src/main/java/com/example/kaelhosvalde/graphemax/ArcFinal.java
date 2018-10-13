@@ -70,5 +70,10 @@ public class ArcFinal extends Arc {
         return largeurEtiquette;
     }
 
+    public void setMidPointCourb(float[] midPoint){
+        hasBeenModified = true;
+        this.setMidPoint(midPoint);
+    } 
+
 
 }

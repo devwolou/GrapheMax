@@ -37,6 +37,11 @@ public class MainActivity extends AppCompatActivity {
     private Boolean onNode = false, onArc = false;
     private Node activNode;
     private ArcFinal activArc;
+//max=========================================================
+    private ArcFinal activArcBoucle;
+
+
+
     private String value;
     private boolean modeCreationArc = true, modeDeplacementNoeuds = false, modeModification = false, modeCourbure = false;
 
@@ -162,6 +167,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case MotionEvent.ACTION_MOVE:
                         //On créer un arc temporaire en suivant le doigt
+
+
                         if (modeCreationArc) {
                             if (firstGraph.getArcTemp() != null) {
                                 firstGraph.setArcTemp(lastTouchDownX, lastTouchDownY);
@@ -172,6 +179,12 @@ public class MainActivity extends AppCompatActivity {
                         } else if (modeDeplacementNoeuds && isOnNode()) {
                             activNode.setCenter(lastTouchDownX, lastTouchDownY);
                             updateView();
+
+//Max=============================================
+                            //On change la courbure de l'arc
+                        } else if(modeCourbure && isOnArc()){
+                            arc = activArc;
+                            calculerMilieuArc();
                         }
 
                         break;
@@ -257,6 +270,14 @@ public class MainActivity extends AppCompatActivity {
         return activNode != null;
     }
 
+//max=======================================================================
+    public boolean isOnArcBoucle(){
+        activArcBoucle = firstGraph.getOneArc(lastTouchDownX,lastTouchDownY);
+        return activArcBoucle != null;
+    }
+
+
+
 
     /**
      * Méthode permettant de savoir s'il on est sur un arc ou non,
@@ -329,6 +350,7 @@ public class MainActivity extends AppCompatActivity {
                     alertDialogBuilder.setTitle(R.string.tailleNode);
 
                     // set dialog message
+
                     alertDialogBuilder
                             .setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
                                 @Override
@@ -481,6 +503,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.mnuUpdateNodeArc:
                 modeModification =true;
+                //max
+                modeCourbure=true;
                 modeCreationArc =false;
                 modeDeplacementNoeuds = false;
                 return true;
@@ -498,5 +522,59 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    /**
+     * Méthode permettant de modifier la courbure de l'arc en prennant en compte la tangente
+     * et le point de milieu des deux noeuds (en ligne droite)
+     *
+     * Cette méthode a été réalisé par Goaillo github (à revoir)===============================================
+     */
+//max===============================================================
+    public void calculerMilieuArc(){
+        Node nFrom = activArc.getNodeFrom(), nTo = activArc.getNodeTo();
+        Path pathTemp = new Path();
+        pathTemp.moveTo(nFrom.centerX(),nFrom.centerY());
+        pathTemp.quadTo((nFrom.centerX()+nTo.centerX())/2,(nFrom.centerY()+nTo.centerY())/2,nTo.centerX(),nTo.centerY());
+
+        ////La partie de calcul sur les coefficients des différentes droites à été réalisée à l'aide de Kévin Boisgontier
+
+        float[] mid = {0, 0}, tan = {0, 0};
+        PathMeasure pm = new PathMeasure(pathTemp,false);
+        pm.getPosTan(pm.getLength()/2, mid, tan);
+
+        //Dernieres coordonnées touchées
+        float x1 = lastTouchDownX;
+        float y1 = lastTouchDownY;
+
+        //Coefficient pour le calcul du projeté orthogonal
+        float c = (tan[0]*(mid[0]-x1)+tan[1]*(mid[1]-y1))/(tan[0]*tan[0]+tan[1]*tan[1]);
+
+        //Coefficients de la droite parallèle à la tangente passant par x1 et y1
+        float m1 = tan[1]/tan[0];
+        float b1 = y1-m1*x1;
+
+        //Coefficients de la droite perpendiculaire à la tangente
+        float m2 = (y1-mid[1]+tan[1]*c)/(x1-mid[0]+tan[0]*c);
+        float b2 = mid[1]-m2*mid[0];
+
+        //Point d'intersection des deux droites
+        float x = (b2-b1)/(m1-m2);
+        float y = m1*((b2-b1)/(m1-m2))+b1;
+
+
+        if(tan[0]==0){
+            x = x1;
+            y = mid[1];
+        }
+        if(tan[1]==0){
+            x = mid[0];
+            y = y1;
+        }
+
+        float[] newMid = {x,y};
+        activArc.setMidPointCourb(newMid);
+        updateView();
     }
 }

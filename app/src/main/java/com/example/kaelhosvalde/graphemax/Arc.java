@@ -8,8 +8,6 @@ public class Arc {
         this.nodeFrom = _nodeFrom;
     }
 
-    public Arc(){}
-
     public Node getNodeFrom() {
         return nodeFrom;
     }
