@@ -4,4 +4,20 @@
     <item
         android:id="@+id/actionModifEtqArc"
         android:title="@string/actionModifEtqArc" />
+//max================================================================================
+    <item
+        android:id="@+id/actionDeleteArc"
+        android:title="@string/actionDeleteArc" />
+    <item
+        android:id="@+id/actionResizeArc"
+        android:title="@string/actionResizeArc" />
+    <item
+        android:id="@+id/actionModifArcColor"
+        android:title="@string/actionModifArcColor" />
+    <item
+        android:id="@+id/actionResizeEtiquette"
+        android:title="@string/actionResizeEtiquette" />
+    <item
+        android:id="@+id/actionResizeBoucle"
+        android:title="@string/actionResizeBoucle" />
 </menu>

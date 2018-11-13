@@ -19,6 +19,12 @@
     <string name="creerNoeud">Création nouveau noeud</string>
     <string name="mnuUpdateNodeArc">Menu modif noeud/Arc</string>
     <string name="tailleNode">La taille du noeud</string>
+    <string name="actionResizeBoucle">actionResizeBoucle</string>
+    <string name="actionResizeEtiquette">Taille Etiquette</string>
+    <string name="actionModifArcColor">actionModifArcColor</string>
+    <string name="actionResizeArc">Epaisseur de l\'Arc</string>
+    <string name="actionDeleteArc">actionDeleteArc</string>
+    <string name="etiquetteArc"> Renommer l\'étiquette</string>
 
     <string-array name="color_arrays">
         <item>Rouge</item>

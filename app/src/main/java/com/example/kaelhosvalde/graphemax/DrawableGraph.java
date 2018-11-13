@@ -98,14 +98,21 @@ public class DrawableGraph extends Drawable {
 
             if (a instanceof ArcBoucle) {
                 Node n = a.getNodeFrom();
-                // Dessiner boucle
-                path.cubicTo(n.centerX()+n.getRayon()+60,n.centerY()+n.getRayon()+40,
-                        n.centerX()+n.getRayon()+60,n.centerY()-n.getRayon()-40,
-                        n.centerX(),n.centerY());
-                PathMeasure pm = new PathMeasure(path,false);
-                pm.getPosTan(pm.getLength()/2,midPoint,tangent);
-                a.setMidPoint(midPoint);
-                a.setTangent(tangent);
+                if (a.hasBeenModifiedABoucle) {
+                    midPoint = a.getMidPoint();
+                    path.cubicTo(midPoint[0] + n.getRayon() + 60, midPoint[1] + n.getRayon() + 40,
+                            midPoint[0] + n.getRayon() + 60, midPoint[1] - n.getRayon() - 40,
+                            n.centerX(), n.centerY());
+                } else {
+                    // Dessiner boucle
+                    path.cubicTo(n.centerX() + n.getRayon() + 60, n.centerY() + n.getRayon() + 40,
+                            n.centerX() + n.getRayon() + 60, n.centerY() - n.getRayon() - 40,
+                            n.centerX(), n.centerY());
+                    PathMeasure pm = new PathMeasure(path, false);
+                    pm.getPosTan(pm.getLength() / 2, midPoint, tangent);
+                    a.setMidPoint(midPoint);
+                    a.setTangent(tangent);
+                }
 
             } else {
 
@@ -141,8 +148,11 @@ public class DrawableGraph extends Drawable {
             pTexte.setColor(Color.BLACK);
             pTexte.setTextSize(a.getLargeurEtiquette());
             pTexte.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText(a.getEtiquette(), midPoint[0] + 20, midPoint[1] + 20, pTexte);
-
+            if(a.getLargeurEtiquette()<=30) {
+                canvas.drawText(a.getEtiquette(), midPoint[0] -(a.getLargeurEtiquette()/2), midPoint[1] + 20, pTexte);
+            } else{
+                canvas.drawText(a.getEtiquette(), midPoint[0] -(a.getLargeurEtiquette()/2), midPoint[1] + (20+(a.getLargeurEtiquette()-30)), pTexte);
+            }
         }
 
         //On dessine un arc temporaire si il est en cours de création

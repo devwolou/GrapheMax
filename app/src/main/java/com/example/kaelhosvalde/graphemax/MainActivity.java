@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Display;
 import android.view.Menu;
@@ -33,10 +34,11 @@ public class MainActivity extends AppCompatActivity {
     private float lastTouchDownX;
     private float lastTouchDownY;
     private AlertDialog alertDialog;
-    private String etiquette,etiquetteNode,newNodeSize,etiquetteNewNode;
+    private String etiquette,etiquetteNode,newNodeSize,etiquetteNewNode, etiquetteArc,epaisseurArc,NewSizeEtiquette;
     private Boolean onNode = false, onArc = false;
     private Node activNode;
     private ArcFinal activArc;
+    public Point size = new Point();
 //max=========================================================
     private ArcFinal activArcBoucle;
 
@@ -186,6 +188,13 @@ public class MainActivity extends AppCompatActivity {
                             arc = activArc;
                             calculerMilieuArc();
                         }
+//Max======================================================================================04/11
+                        if (isOnArcBoucle() && modeModification){
+                   //         float[] newMidCourb = {lastTouchDownX,lastTouchDownY};
+                            calculerMilieuArc();
+                       //     activArcBoucle.setMidPointCourb(newMidCourb);
+                            updateView();
+                        }
 
                         break;
                 }
@@ -241,21 +250,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        if(modeModification && !onNode && !onArc) {
+            super.onCreateContextMenu(menu, v, menuInfo);
+            MenuInflater inflater = this.getMenuInflater();
+            inflater.inflate(R.menu.menu_context_imgview, menu);
+        }
         if(onNode && modeModification) {
             super.onCreateContextMenu(menu, v, menuInfo);
             MenuInflater inflater = this.getMenuInflater();
             inflater.inflate(R.menu.menu_context_node, menu);
         }
-        else if(onArc && modeModification){
+        if(onArc && modeModification){
             super.onCreateContextMenu(menu, v, menuInfo);
             MenuInflater inflater = this.getMenuInflater();
             inflater.inflate(R.menu.menu_context_arc, menu);
         }
-        else if(modeModification) {
-            super.onCreateContextMenu(menu, v, menuInfo);
-            MenuInflater inflater = this.getMenuInflater();
-            inflater.inflate(R.menu.menu_context_imgview, menu);
-        }
+
         onNode=false;
         onArc = false;
     }
@@ -298,6 +308,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+//Menu Modification Node
             case R.id.actionDeleteNode:
                 if (isOnNode()){
                     Node n =firstGraph.getOneNode(lastTouchDownX,lastTouchDownY);
@@ -481,7 +492,187 @@ public class MainActivity extends AppCompatActivity {
                     alertDialog.show();
                 }
 
-                return true;
+//Menu Modification Arc=================================================================================
+            //Supprimer un Arc
+            case R.id.actionDeleteArc:
+                if (isOnArc()){
+                    ArcFinal a = firstGraph.getOneArc(lastTouchDownX,lastTouchDownY);
+                    firstGraph.removeArc(a);
+                    updateView();
+                }
+                break;
+
+            //Renommer l'etiquette d'un arc
+            case R.id.actionModifEtqArc:
+                if(isOnArc() && modeModification){
+
+                    final EditText inputNewEtiqArc = new EditText(MainActivity.this);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                    alertDialogBuilder.setTitle(R.string.etiquetteArc);
+
+                    // set dialog message
+                    alertDialogBuilder
+                            .setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            })
+                            .setPositiveButton(R.string.ajouter, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // if this button is clicked, close
+                                    // current activity
+                                    etiquetteArc = inputNewEtiqArc.getText().toString();
+
+                                    ArcFinal a =firstGraph.getOneArc(lastTouchDownX,lastTouchDownY);
+                                    a.setEtiquette(etiquetteArc);
+                                    updateView();
+                                }
+                            });
+
+                    alertDialogBuilder.setView(inputNewEtiqArc);
+                    // create alert dialog
+                    alertDialog = alertDialogBuilder.create();
+                    // show it
+                    alertDialog.show();
+                }
+                break;
+
+            //Modifier la couleur d'un Arc
+            case R.id.actionModifArcColor:
+
+                if(isOnArc() && modeModification){
+
+                    final Spinner inputColorArc = new Spinner(this);
+                    ArrayAdapter<CharSequence> adapterNode = ArrayAdapter.createFromResource(this, R.array.color_arrays, android.R.layout.simple_spinner_item);
+                    adapterNode.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    inputColorArc.setAdapter(adapterNode);
+                    AlertDialog.Builder alertDialogBuilderColorNode = new AlertDialog.Builder(
+                            this);
+                    // set title
+                    alertDialogBuilderColorNode.setTitle(R.string.changerCouleur);
+
+                    // set dialog message
+                    alertDialogBuilderColorNode
+                            .setPositiveButton(R.string.ok,new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    //if this button is clicked, close
+                                    // current activity
+
+                                    int pos = inputColorArc.getSelectedItemPosition();
+                                    switch (pos){
+                                        case 0:
+                                            activArc.setColor(Color.RED);
+                                            updateView();
+                                            break;
+                                        case 1:
+                                            activArc.setColor(Color.GREEN);
+                                            updateView();
+                                            break;
+                                        case 2:
+                                            activArc.setColor(Color.BLUE);
+                                            updateView();
+                                            break;
+                                        case 3:
+                                            activArc.setColor(Color.parseColor("#f49542"));
+                                            updateView();
+                                            break;
+                                        case 4:
+                                            activArc.setColor(Color.CYAN);
+                                            updateView();
+                                            break;
+                                        case 5:
+                                            activArc.setColor(Color.MAGENTA);
+                                            updateView();
+                                            break;
+                                        case 6:
+                                            activArc.setColor(Color.BLACK);
+                                            updateView();
+                                            break;
+                                    }
+
+                                }
+                            });
+
+                    alertDialogBuilderColorNode.setView(inputColorArc);
+                    // create alert dialog
+                    alertDialog = alertDialogBuilderColorNode.create();
+                    alertDialog.show();
+                }
+                break;
+
+            //Modifier l'épaisseur d'un arc
+            case R.id.actionResizeArc:
+                if (isOnArc() && modeModification){
+                    final EditText inputNewEpaisseurArc = new EditText(MainActivity.this);
+                    inputNewEpaisseurArc.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                    alertDialogBuilder.setTitle(R.string.actionResizeArc);
+
+                    // set dialog message
+                    alertDialogBuilder
+                            .setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            })
+                            .setPositiveButton(R.string.ajouter, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // if this button is clicked, close
+                                    // current activity
+                                    epaisseurArc = inputNewEpaisseurArc.getText().toString();
+
+                                    ArcFinal a =firstGraph.getOneArc(lastTouchDownX,lastTouchDownY);
+                                    a.setWidth(Integer.valueOf(epaisseurArc));
+                                    updateView();
+                                }
+                            });
+
+                    alertDialogBuilder.setView(inputNewEpaisseurArc);
+                    // create alert dialog
+                    alertDialog = alertDialogBuilder.create();
+                    // show it
+                    alertDialog.show();
+                }
+                break;
+
+            //Modifier l'épaisseur d'un arc
+            case R.id.actionResizeEtiquette:
+                if (isOnArc() && modeModification){
+                    final EditText inputNewSizeEtiquette = new EditText(MainActivity.this);
+                    inputNewSizeEtiquette.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                    alertDialogBuilder.setTitle(R.string.actionResizeEtiquette);
+
+                    // set dialog message
+                    alertDialogBuilder
+                            .setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            })
+                            .setPositiveButton(R.string.ajouter, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // if this button is clicked, close
+                                    // current activity
+                                    NewSizeEtiquette = inputNewSizeEtiquette.getText().toString();
+
+                                    ArcFinal a =firstGraph.getOneArc(lastTouchDownX,lastTouchDownY);
+                                    a.setLargeurEtiquette(Integer.valueOf(NewSizeEtiquette));
+                                    updateView();
+                                }
+                            });
+
+                    alertDialogBuilder.setView(inputNewSizeEtiquette);
+                    // create alert dialog
+                    alertDialog = alertDialogBuilder.create();
+                    // show it
+                    alertDialog.show();
+                }
+                break;
+//                return true;
         }
 
 
@@ -504,7 +695,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.mnuUpdateNodeArc:
                 modeModification =true;
                 //max
-                modeCourbure=true;
+                //modeCourbure=true;
                 modeCreationArc =false;
                 modeDeplacementNoeuds = false;
                 return true;
@@ -517,7 +708,7 @@ public class MainActivity extends AppCompatActivity {
                     firstGraph.removeNode(n);
                 }
 
-                firstGraph.initialisationGraph();
+                firstGraph.initialisationGraph(size);
                 updateView();
                 return true;
         }
@@ -534,10 +725,26 @@ public class MainActivity extends AppCompatActivity {
 //max===============================================================
     public void calculerMilieuArc(){
         Node nFrom = activArc.getNodeFrom(), nTo = activArc.getNodeTo();
+        Log.i("DEBUGNODE FROM",activArc.getNodeFrom().getEtiquette());
+        Log.i("DEBUGNODE TO",activArc.getNodeTo().getEtiquette());
+
+        if (activArc.getNodeFrom() == activArc.getNodeTo())
+        {
+            Log.i("EGALE","OK");
+        }
+        else
+            Log.i("EGALE","NON");
+
         Path pathTemp = new Path();
         pathTemp.moveTo(nFrom.centerX(),nFrom.centerY());
-        pathTemp.quadTo((nFrom.centerX()+nTo.centerX())/2,(nFrom.centerY()+nTo.centerY())/2,nTo.centerX(),nTo.centerY());
+        if(activArc.getNodeFrom() == activArc.getNodeTo()){
+            pathTemp.cubicTo(nFrom.centerX() + nFrom.getRayon() + 60, nFrom.centerY() + nFrom.getRayon() + 40,
+                    nFrom.centerX() + nFrom.getRayon() + 60, nFrom.centerY() - nFrom.getRayon() - 40,
+                    nFrom.centerX(), nFrom.centerY());
+        }else {
 
+            pathTemp.quadTo((nFrom.centerX() + nTo.centerX()) / 2, (nFrom.centerY() + nTo.centerY()) / 2, nTo.centerX(), nTo.centerY());
+        }
         ////La partie de calcul sur les coefficients des différentes droites à été réalisée à l'aide de Kévin Boisgontier
 
         float[] mid = {0, 0}, tan = {0, 0};

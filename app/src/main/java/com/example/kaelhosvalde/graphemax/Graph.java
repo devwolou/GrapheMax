@@ -25,7 +25,7 @@ public class Graph {
         Log.i("SIZE GRAPH ",String.valueOf(p.x));
         Log.i("SIZE GRAPH ",String.valueOf(p.y));
 
-        initialisationGraph();
+        initialisationGraph(p);
 
     }
 
@@ -84,6 +84,7 @@ public class Graph {
     public void makeArcTempNull() {
         arcTemp = null;
     }
+
     public void addArc(ArcFinal a) {
         arcs.add(a);
     }
@@ -92,17 +93,17 @@ public class Graph {
         arcs.remove(a);
     }
 
-    public void initialisationGraph(){
+    public void initialisationGraph(Point p){
 
-        nodes.add(new Node(140,200, "1", Color.BLUE));
-        nodes.add(new Node(360,200, "2", Color.BLUE));
-        nodes.add(new Node(580,200, "3", Color.BLUE));
-        nodes.add(new Node(140,450, "4", Color.BLUE));
-        nodes.add(new Node(360,450, "5", Color.BLUE));
-        nodes.add(new Node(580,450, "6", Color.BLUE));
-        nodes.add(new Node(140,700, "7", Color.BLUE));
-        nodes.add(new Node(360,700, "8", Color.BLUE));
-        nodes.add(new Node(580,700, "9", Color.BLUE));
+        nodes.add(new Node(p.x/8,p.y/8, "1", Color.BLUE));
+        nodes.add(new Node(p.x/2,p.y/8, "2", Color.BLUE));
+        nodes.add(new Node(7*p.x/8,p.y/8, "3", Color.BLUE));
+        nodes.add(new Node(p.x/8,3*p.y/8, "4", Color.BLUE));
+        nodes.add(new Node(p.x/2,3*p.y/8, "5", Color.BLUE));
+        nodes.add(new Node(7*p.x/8,3*p.y/8, "6", Color.BLUE));
+        nodes.add(new Node(p.x/8,2*p.y/3, "7", Color.BLUE));
+        nodes.add(new Node(p.x/2,2*p.y/3, "8", Color.BLUE));
+        nodes.add(new Node(7*p.x/8,2*p.y/3, "9", Color.BLUE));
 
     }
 

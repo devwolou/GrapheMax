@@ -12,6 +12,7 @@ public class ArcFinal extends Arc {
     private int color;
     private int width;
     public boolean hasBeenModified = false;
+    public boolean hasBeenModifiedABoucle = false;
 
     public ArcFinal(Node _nodeFrom, Node _nodeTo, String _etiquette){
         super(_nodeFrom);
@@ -70,8 +71,13 @@ public class ArcFinal extends Arc {
         return largeurEtiquette;
     }
 
+    public int setLargeurEtiquette(int largeurEtiquette) {
+        return this.largeurEtiquette = largeurEtiquette;
+    }
+
     public void setMidPointCourb(float[] midPoint){
         hasBeenModified = true;
+        hasBeenModifiedABoucle= true;
         this.setMidPoint(midPoint);
     } 
 
