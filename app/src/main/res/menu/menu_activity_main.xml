@@ -15,5 +15,7 @@
     <item
         android:id="@+id/mnuResetGraph"
         android:title="@string/mnuResetGraph" />
-
+    <item
+        android:id="@+id/mnuMoovArc"
+        android:title="Mode déplacement Arc" />
 </menu>

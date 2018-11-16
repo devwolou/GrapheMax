@@ -95,6 +95,9 @@ public class Graph {
 
     public void initialisationGraph(Point p){
 
+        Log.i("Size x :", String.valueOf(p.x));
+        Log.i("Size y :", String.valueOf(p.y));
+
         nodes.add(new Node(p.x/8,p.y/8, "1", Color.BLUE));
         nodes.add(new Node(p.x/2,p.y/8, "2", Color.BLUE));
         nodes.add(new Node(7*p.x/8,p.y/8, "3", Color.BLUE));

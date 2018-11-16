@@ -25,6 +25,7 @@
     <string name="actionResizeArc">Epaisseur de l\'Arc</string>
     <string name="actionDeleteArc">actionDeleteArc</string>
     <string name="etiquetteArc"> Renommer l\'étiquette</string>
+    <string name="mnuMoovArc">Mode déplacement Arc</string>
 
     <string-array name="color_arrays">
         <item>Rouge</item>

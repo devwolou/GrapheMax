@@ -10,7 +10,7 @@ import android.graphics.PixelFormat;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.drawable.Drawable;
-
+import android.util.Log;
 
 
 public class DrawableGraph extends Drawable {
@@ -100,14 +100,20 @@ public class DrawableGraph extends Drawable {
                 Node n = a.getNodeFrom();
                 if (a.hasBeenModifiedABoucle) {
                     midPoint = a.getMidPoint();
-                    path.cubicTo(midPoint[0] + n.getRayon() + 60, midPoint[1] + n.getRayon() + 40,
-                            midPoint[0] + n.getRayon() + 60, midPoint[1] - n.getRayon() - 40,
-                            n.centerX(), n.centerY());
+                    path.cubicTo(
+                            midPoint[0] + 5*n.getRayon(), midPoint[1] + 5*n.getRayon(),
+                            midPoint[0] - 5*n.getRayon(), midPoint[1] + 5*n.getRayon(),
+     //                       n.centerX() - 5*n.getRayon(), n.centerY() + 5*n.getRayon(),
+                            n.centerX(), n.centerY()
+                    );
+
                 } else {
                     // Dessiner boucle
-                    path.cubicTo(n.centerX() + n.getRayon() + 60, n.centerY() + n.getRayon() + 40,
-                            n.centerX() + n.getRayon() + 60, n.centerY() - n.getRayon() - 40,
-                            n.centerX(), n.centerY());
+                    path.cubicTo(
+                            n.centerX() + 5*n.getRayon(), n.centerY() + 5*n.getRayon(),
+                            n.centerX() - 5*n.getRayon(), n.centerY() + 5*n.getRayon(),
+                            n.centerX(), n.centerY()
+                    );
                     PathMeasure pm = new PathMeasure(path, false);
                     pm.getPosTan(pm.getLength() / 2, midPoint, tangent);
                     a.setMidPoint(midPoint);

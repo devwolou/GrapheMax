@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private Boolean onNode = false, onArc = false;
     private Node activNode;
     private ArcFinal activArc;
-    public Point size = new Point();
+    public Point size;
 //max=========================================================
     private ArcFinal activArcBoucle;
 
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Recuperation de la taille de l'écran
         Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
+        size = new Point();
         display.getSize(size);
 
         //initialisation du graph et d'image view
@@ -184,18 +184,17 @@ public class MainActivity extends AppCompatActivity {
 
 //Max=============================================
                             //On change la courbure de l'arc
-                        } else if(modeCourbure && isOnArc()){
+                        } else if(modeCourbure && isOnArc() && !isOnArcBoucle()){
                             arc = activArc;
+                            Log.i("je rentre: ","moi");
                             calculerMilieuArc();
                         }
 //Max======================================================================================04/11
-                        if (isOnArcBoucle() && modeModification){
-                   //         float[] newMidCourb = {lastTouchDownX,lastTouchDownY};
+                        else if (isOnArcBoucle() && modeCourbure){
+                            Log.i("je rentre: ","moicourbe");
                             calculerMilieuArc();
-                       //     activArcBoucle.setMidPointCourb(newMidCourb);
                             updateView();
                         }
-
                         break;
                 }
                 return false;
@@ -219,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
                         return false;
                     }
                 }
+
 
                 if (modeModification){
                     onArc = isOnArc();
@@ -250,21 +250,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        if(modeModification && !onNode && !onArc) {
-            super.onCreateContextMenu(menu, v, menuInfo);
-            MenuInflater inflater = this.getMenuInflater();
-            inflater.inflate(R.menu.menu_context_imgview, menu);
-        }
+
         if(onNode && modeModification) {
             super.onCreateContextMenu(menu, v, menuInfo);
             MenuInflater inflater = this.getMenuInflater();
             inflater.inflate(R.menu.menu_context_node, menu);
         }
-        if(onArc && modeModification){
+        else if(onArc && modeModification && !modeCourbure){
             super.onCreateContextMenu(menu, v, menuInfo);
             MenuInflater inflater = this.getMenuInflater();
             inflater.inflate(R.menu.menu_context_arc, menu);
         }
+        if(modeModification && !onNode && !onArc && !modeCourbure) {
+            super.onCreateContextMenu(menu, v, menuInfo);
+            MenuInflater inflater = this.getMenuInflater();
+            inflater.inflate(R.menu.menu_context_imgview, menu);
+        }
+
 
         onNode=false;
         onArc = false;
@@ -283,7 +285,8 @@ public class MainActivity extends AppCompatActivity {
 //max=======================================================================
     public boolean isOnArcBoucle(){
         activArcBoucle = firstGraph.getOneArc(lastTouchDownX,lastTouchDownY);
-        return activArcBoucle != null;
+
+        return ((activArcBoucle != null)&&(activArcBoucle instanceof ArcBoucle));
     }
 
 
@@ -326,12 +329,6 @@ public class MainActivity extends AppCompatActivity {
 
                     // set dialog message
                     alertDialogBuilder
-                            .setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
-                                }
-                            })
                             .setPositiveButton(R.string.ajouter, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     // if this button is clicked, close
@@ -363,12 +360,6 @@ public class MainActivity extends AppCompatActivity {
                     // set dialog message
 
                     alertDialogBuilder
-                            .setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
-                                }
-                            })
                             .setPositiveButton(R.string.ajouter, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     // if this button is clicked, close
@@ -463,12 +454,6 @@ public class MainActivity extends AppCompatActivity {
 
                     // set dialog message
                     alertDialogBuilder
-                            .setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
-                                }
-                            })
                             .setPositiveButton(R.string.ajouter, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     // if this button is clicked, close
@@ -512,12 +497,6 @@ public class MainActivity extends AppCompatActivity {
 
                     // set dialog message
                     alertDialogBuilder
-                            .setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
-                                }
-                            })
                             .setPositiveButton(R.string.ajouter, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     // if this button is clicked, close
@@ -611,12 +590,6 @@ public class MainActivity extends AppCompatActivity {
 
                     // set dialog message
                     alertDialogBuilder
-                            .setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
-                                }
-                            })
                             .setPositiveButton(R.string.ajouter, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     // if this button is clicked, close
@@ -647,12 +620,6 @@ public class MainActivity extends AppCompatActivity {
 
                     // set dialog message
                     alertDialogBuilder
-                            .setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
-                                }
-                            })
                             .setPositiveButton(R.string.ajouter, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     // if this button is clicked, close
@@ -686,6 +653,7 @@ public class MainActivity extends AppCompatActivity {
                 modeCreationArc =true;
                 modeDeplacementNoeuds = false;
                 modeModification = false;
+                modeCourbure=false;
                 return true;
             case R.id.mnuMoovGraph:
                 modeModification =false;
@@ -695,7 +663,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.mnuUpdateNodeArc:
                 modeModification =true;
                 //max
-                //modeCourbure=true;
+                modeCourbure=false;
                 modeCreationArc =false;
                 modeDeplacementNoeuds = false;
                 return true;
@@ -703,6 +671,7 @@ public class MainActivity extends AppCompatActivity {
                 modeCreationArc =true;
                 modeDeplacementNoeuds = false;
                 modeModification = false;
+                modeCourbure=false;
 
                 for(Node n:firstGraph.getNodes()){
                     firstGraph.removeNode(n);
@@ -711,6 +680,12 @@ public class MainActivity extends AppCompatActivity {
                 firstGraph.initialisationGraph(size);
                 updateView();
                 return true;
+            case R.id.mnuMoovArc:
+                modeCourbure=true;
+                modeDeplacementNoeuds = false;
+                modeModification = false;
+                modeCreationArc =false;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -724,6 +699,7 @@ public class MainActivity extends AppCompatActivity {
      */
 //max===============================================================
     public void calculerMilieuArc(){
+        Log.i("je rentre: ","je suis là");
         Node nFrom = activArc.getNodeFrom(), nTo = activArc.getNodeTo();
         Log.i("DEBUGNODE FROM",activArc.getNodeFrom().getEtiquette());
         Log.i("DEBUGNODE TO",activArc.getNodeTo().getEtiquette());

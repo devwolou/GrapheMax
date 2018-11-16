@@ -19,8 +19,8 @@ public class ArcFinal extends Arc {
         this.nodeTo = _nodeTo;
         this.etiquette = _etiquette;
         this.color = Color.BLACK;
-        this.width = 5;
-        this.largeurEtiquette = 30;
+        this.width = 10;
+        this.largeurEtiquette = 40;
     }
 
     public Node getNodeTo(){
