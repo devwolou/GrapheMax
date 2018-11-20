@@ -3,10 +3,14 @@ package com.example.kaelhosvalde.graphemax;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.Point;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +27,14 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -685,7 +697,15 @@ public class MainActivity extends AppCompatActivity {
                 modeDeplacementNoeuds = false;
                 modeModification = false;
                 modeCreationArc =false;
+                return true;
 
+            case R.id.sendMail:
+                makeScreenShot(imgv);
+                modeCourbure=false;
+                modeDeplacementNoeuds = false;
+                modeModification = false;
+                modeCreationArc =true;
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -759,5 +779,54 @@ public class MainActivity extends AppCompatActivity {
         float[] newMid = {x,y};
         activArc.setMidPointCourb(newMid);
         updateView();
+    }
+
+    public void makeScreenShot(View view){
+        View v1 = view.getRootView();
+        v1.setDrawingCacheEnabled(true);
+        Bitmap bm = v1.getDrawingCache();
+
+        StoreByteImage(bm,100);
+    }
+
+    public boolean StoreByteImage(Bitmap myImage, int quality)
+    {
+        FileOutputStream fileOutputStream = null;
+
+        File sdCard = Environment.getExternalStorageDirectory();
+        String filename= "GrapheCW" + 1 + ".jpg";
+        File file = new File(sdCard, filename);
+        try
+        {
+            fileOutputStream = new FileOutputStream(file);
+            BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
+            myImage.compress(Bitmap.CompressFormat.JPEG, quality, bos);
+            bos.flush();
+            bos.close();
+        }
+        catch (FileNotFoundException e)
+        {
+            Log.i("EXCP FNF", e.getMessage());
+        }
+        catch (IOException e)
+        {
+            Log.i("EXCP IO", e.getMessage());
+        }
+        envoieMail(filename);
+
+        return true;
+    }
+
+    public void envoieMail(String file){
+        Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        String[] recipients = new String[]{"", "",};
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, recipients);
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, file);
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Bonne réception");
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+file));
+        emailIntent.setType("text/plain");
+        startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+        finish();
+
     }
 }
