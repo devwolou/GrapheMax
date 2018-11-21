@@ -4,8 +4,10 @@ package com.example.kaelhosvalde.graphemax;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
+import java.io.Serializable;
 
-public class Node extends RectF {
+
+public class Node extends RectF implements Serializable{
 
         private String etiquette;
         private int color;

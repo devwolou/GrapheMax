@@ -1,6 +1,8 @@
 package com.example.kaelhosvalde.graphemax;
 
-public class  ArcBoucle extends ArcFinal {
+import java.io.Serializable;
+
+public class  ArcBoucle extends ArcFinal implements Serializable {
 
     public ArcBoucle(Node n,String etiquette) {
         super(n, n, etiquette);

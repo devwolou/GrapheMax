@@ -28,6 +28,8 @@
     <string name="mnuMoovArc">Mode déplacement Arc</string>
     <string name="sendMail">Envoie par Mail</string>
     <string name="envoyer_par_mail">Envoyer par Mail</string>
+    <string name="mnuSaveGraph">Sauvegarder le graphe</string>
+    <string name="mnuLoadSavedGraph">Charger un graphe</string>
 
     <string-array name="color_arrays">
         <item>Rouge</item>

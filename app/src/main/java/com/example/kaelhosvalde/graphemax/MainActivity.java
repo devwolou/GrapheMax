@@ -706,6 +706,20 @@ public class MainActivity extends AppCompatActivity {
                 modeModification = false;
                 modeCreationArc =true;
                 return true;
+            case R.id.mnuLoadSavedGraph:
+                //Intent i = new Intent(MainActivity.this, GraphLoadActivity.class);
+                //startActivity(i);
+                Graph graphede = (Graph) Serialiser.deserialise("grapheSave.txt",MainActivity.this);
+                firstGraph = null;
+                firstGraph = graphede;
+                updateView();
+                return true;
+            case R.id.mnuSaveGraph:
+                if (Serialiser.serialise("grapheSave.txt", firstGraph.getNodes(), MainActivity.this)) {
+                    Log.i("serial", "OK");
+
+                } else Log.i("serial", "NON");
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

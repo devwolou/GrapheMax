@@ -2,7 +2,9 @@ package com.example.kaelhosvalde.graphemax;
 
 import android.graphics.Color;
 
-public class ArcFinal extends Arc {
+import java.io.Serializable;
+
+public class ArcFinal extends Arc implements Serializable {
 
     private Node nodeTo;
     private float [] midPoint;

@@ -19,4 +19,6 @@
     <string name="ajouter">Add</string>
     <string name="mnuUpdateNodeArc">Mode update Node/Bow</string>
     <string name="tailleNode">Size of node</string>
+    <string name="mnuSaveGraph">Sauvegarder le graphe</string>
+    <string name="mnuLoadSavedGraph">Charger un graphe</string>
 </resources>

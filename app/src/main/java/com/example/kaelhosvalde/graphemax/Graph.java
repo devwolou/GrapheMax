@@ -7,11 +7,12 @@ import android.util.Log;
 
 import com.example.kaelhosvalde.graphemax.MainActivity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class Graph {
+public class Graph implements Serializable{
 
     private Collection<Node> nodes;
     private Collection<ArcFinal> arcs;

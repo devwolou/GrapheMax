@@ -10,14 +10,22 @@
         android:id="@+id/mnuUpdateNodeArc"
         android:title="@string/mnuUpdateNodeArc" />
     <item
+        android:id="@+id/mnuMoovArc"
+        android:title="Mode déplacement Arc" />
+    <item
         android:id="@+id/mnuMoovGraph"
         android:title="@string/mnuMoovGraph" />
     <item
         android:id="@+id/mnuResetGraph"
         android:title="@string/mnuResetGraph" />
     <item
-        android:id="@+id/mnuMoovArc"
-        android:title="Mode déplacement Arc" />
+        android:id="@+id/mnuSaveGraph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/mnuSaveGraph" />
+    <item
+        android:id="@+id/mnuLoadSavedGraph"
+        android:title="@string/mnuLoadSavedGraph" />
 
     <item
         android:id="@+id/sendMail"
